@@ -1,0 +1,10 @@
+.git
+.git/**
+vendor/
+runtime/cookie-validation-key
+runtime/sessions/
+runtime/uploads/
+runtime/tmp/
+runtime/logs/
+runtime/*.sqlite-shm
+runtime/*.sqlite-wal
