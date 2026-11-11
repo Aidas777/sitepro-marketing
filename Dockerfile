@@ -3,8 +3,8 @@ FROM php:8.2-apache
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/web
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libsqlite3-dev \
-    && docker-php-ext-install pdo_sqlite \
+    && apt-get install -y --no-install-recommends libsqlite3-dev libzip-dev unzip zip \
+    && docker-php-ext-install pdo_sqlite zip \
     && a2enmod rewrite \
     && sed -ri "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf \
     && printf '<Directory /var/www/html/web>\n    AllowOverride All\n    Require all granted\n</Directory>\n' > /etc/apache2/conf-available/sitepro.conf \
