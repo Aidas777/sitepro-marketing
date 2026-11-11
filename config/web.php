@@ -3,6 +3,30 @@
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
+$cookieValidationKey = getenv('COOKIE_VALIDATION_KEY');
+if ($cookieValidationKey !== false) {
+    $cookieValidationKey = trim($cookieValidationKey);
+}
+
+if ($cookieValidationKey === false || $cookieValidationKey === '') {
+    $cookieValidationKeyFile = dirname(__DIR__) . '/runtime/cookie-validation-key';
+
+    if (is_file($cookieValidationKeyFile)) {
+        $storedCookieValidationKey = file_get_contents($cookieValidationKeyFile);
+        if ($storedCookieValidationKey === false) {
+            throw new RuntimeException('Unable to read the local cookie validation key.');
+        }
+        $cookieValidationKey = trim($storedCookieValidationKey);
+    }
+
+    if ($cookieValidationKey === false || $cookieValidationKey === '') {
+        $cookieValidationKey = bin2hex(random_bytes(32));
+        if (file_put_contents($cookieValidationKeyFile, $cookieValidationKey, LOCK_EX) === false) {
+            throw new RuntimeException('Unable to save the local cookie validation key.');
+        }
+    }
+}
+
 $config = [
     'id' => 'sitepro-marketing',
     'basePath' => dirname(__DIR__),
@@ -16,8 +40,7 @@ $config = [
     ],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '3vCgYIaTJdMC4cXFpFWnSjQGlQEwXhaB',
+            'cookieValidationKey' => $cookieValidationKey,
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

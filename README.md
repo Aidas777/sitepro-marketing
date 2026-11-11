@@ -5,6 +5,7 @@ Yii2 demo for keyword imports, cleanup, ad grouping, copy preview, and Google Ad
 ## Run locally
 
 Run `start-local.bat` from this directory and open <http://127.0.0.1:8010>. The app uses SQLite at `runtime/sitepro.sqlite`.
+The local cookie validation key is generated in `runtime/cookie-validation-key` and is ignored by Git. Set `COOKIE_VALIDATION_KEY` to a strong secret in the hosting environment; do not commit it.
 
 ## Demo data and workflow
 
